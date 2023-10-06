@@ -1,4 +1,5 @@
 import View from "./view.js";
+import Store from "./store.js";
 
 // const App = {
 //   //All selected HTML elements
@@ -144,8 +145,26 @@ import View from "./view.js";
 
 // window.addEventListener("load", App.init);
 
+// Our players "config" - defines icons, colors, name, etc.
+const players = [
+  {
+    id: 1,
+    name: "Player 1",
+    iconClass: "fa-x",
+    colorClass: "turquoise",
+  },
+  {
+    id: 2,
+    name: "Player 2",
+    iconClass: "fa-o",
+    colorClass: "yellow",
+  },
+];
+
+// MVC pattern
 function init() {
   const view = new View();
+  const store = new Store();
 
   view.bindGameResetEvent((event) => {
     console.log("🚀 ~ Reset event:", event);
@@ -156,7 +175,8 @@ function init() {
   });
 
   view.bindPlayerNew((event) => {
-    console.log("🚀 ~ new Player event:", event);
+    view.setTurnIndicator(players[1]);
+    view.handlerPlayerMove(event.target, players[1]);
   });
 }
 
