@@ -22,20 +22,25 @@ function init() {
   const view = new View();
   const store = new Store("t3-storage-key", players);
 
+  //Current tab state changes
+  store.addEventListener("statechange", () => {
+    view.render(store.game, store.stats);
+  });
+
   view.bindGameResetEvent((event) => {
     store.reset();
-    view.render(store.game, store.stats);
   });
 
   view.bindNewRoundEvent((event) => {
     store.newRound();
-    view.render(store.game, store.stats);
   });
 
+  //A different tab state changes
   window.addEventListener("storage", () => {
     view.render(store.game, store.stats);
   });
 
+  //the first load of the document
   view.render(store.game, store.stats);
 
   view.bindPlayerNew((square) => {
@@ -51,7 +56,6 @@ function init() {
 
     // Advance to the next state by pushing a move to the moves array
     store.playerMove(+square.id);
-    view.render(store.game, store.stats);
   });
 }
 
