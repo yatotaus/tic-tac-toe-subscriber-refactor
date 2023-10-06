@@ -164,19 +164,61 @@ const players = [
 // MVC pattern
 function init() {
   const view = new View();
-  const store = new Store();
+  const store = new Store(players);
 
   view.bindGameResetEvent((event) => {
-    console.log("🚀 ~ Reset event:", event);
+    view.closeAll();
+
+    store.reset();
+
+    view.clearMoves();
+    view.setTurnIndicator(store.game.currentPlayer);
+
+    view.updateScoreboard(
+      store.stats.playerWithStats[0].wins,
+      store.stats.playerWithStats[1].wins,
+      store.stats.ties
+    );
   });
 
   view.bindNewRoundEvent((event) => {
-    console.log("🚀 ~ New round event:", event);
+    store.newRound();
+
+    view.closeAll();
+    view.clearMoves();
+    view.setTurnIndicator(store.game.currentPlayer);
+    view.updateScoreboard(
+      store.stats.playerWithStats[0].wins,
+      store.stats.playerWithStats[1].wins,
+      store.stats.ties
+    );
   });
 
-  view.bindPlayerNew((event) => {
-    view.setTurnIndicator(players[1]);
-    view.handlerPlayerMove(event.target, players[1]);
+  view.bindPlayerNew((square) => {
+    const clickedSquare = event.target;
+
+    const existingMove = store.game.moves.find(
+      (move) => move.squareId === +square.id
+    );
+
+    if (existingMove) {
+      return;
+    }
+    view.handlerPlayerMove(square, store.game.currentPlayer);
+
+    // Advance to the next state by pushing a move to the moves array
+    store.playerMove(+square.id);
+
+    if (store.game.status.isComplete) {
+      view.openModal(
+        store.game.status.winner
+          ? `${store.game.status.winner.name} wins!`
+          : "Tie!"
+      );
+      return;
+    }
+
+    view.setTurnIndicator(store.game.currentPlayer);
   });
 }
 
