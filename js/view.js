@@ -97,6 +97,16 @@ export default class View {
     squareEl.replaceChildren(icon);
   }
 
+  initializeMoves(moves) {
+    this.$$.squares.forEach((square) => {
+      const existingMove = moves.find((move) => move.squareId === +square.id);
+
+      if (existingMove) {
+        this.handlerPlayerMove(square, existingMove.player);
+      }
+    });
+  }
+
   setTurnIndicator(player) {
     const icon = document.createElement("i");
     const label = document.createElement("p");
