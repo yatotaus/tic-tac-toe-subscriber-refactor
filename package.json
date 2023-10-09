@@ -1,0 +1,25 @@
+{
+  "name": "tic-tac-toe-subscriber-refactor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "time-stamp": "^2.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yatotaus/tic-tac-toe-subscriber-refactor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yatotaus/tic-tac-toe-subscriber-refactor/issues"
+  },
+  "homepage": "https://github.com/yatotaus/tic-tac-toe-subscriber-refactor#readme"
+}

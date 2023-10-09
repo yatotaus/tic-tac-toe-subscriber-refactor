@@ -1,4 +1,6 @@
-const initialValue = {
+import type { Game, GameState, Player } from "./types";
+
+const initialState: GameState = {
   currentGameMoves: [],
   history: {
     currentRoundGames: [],
@@ -7,11 +9,12 @@ const initialValue = {
 };
 
 export default class Store extends EventTarget {
-  #state = initialValue;
-  constructor(key, players) {
+  #state = initialState;
+  constructor(
+    private readonly storageKey: string,
+    private readonly players: Player[]
+  ) {
     super();
-    this.storageKey = key;
-    this.players = players;
   }
 
   get stats() {
@@ -48,7 +51,7 @@ export default class Store extends EventTarget {
       [7, 8, 9],
     ];
 
-    let winner = null;
+    let winner;
 
     for (const player of this.players) {
       const selectedSquareIds = state.currentGameMoves
@@ -72,7 +75,14 @@ export default class Store extends EventTarget {
     };
   }
 
-  playerMove(squareId) {
+  playerMove(squareId: number) {
+    /**
+     * Never mutate state directly.  Create copy of state, edit the copy,
+     * and save copy as new version of state.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/structuredClone
+     * @see https://redux.js.org/style-guide/#do-not-mutate-state
+     */
     const stateClone = structuredClone(this.#getState());
 
     stateClone.currentGameMoves.push({
@@ -83,6 +93,12 @@ export default class Store extends EventTarget {
     this.#saveState(stateClone);
   }
 
+  /**
+   * Resets the game.
+   *
+   * If the current game is complete, the game is archived.
+   * If the current game is NOT complete, it is deleted.
+   */
   reset() {
     const stateClone = structuredClone(this.#getState());
 
@@ -100,7 +116,7 @@ export default class Store extends EventTarget {
 
   newRound() {
     this.reset();
-    const stateClone = structuredClone(this.#getState());
+    const stateClone = structuredClone(this.#getState()) as GameState;
     stateClone.history.allGames.push(...stateClone.history.currentRoundGames);
     stateClone.history.currentRoundGames = [];
 
@@ -109,10 +125,10 @@ export default class Store extends EventTarget {
 
   #getState() {
     const item = window.localStorage.getItem(this.storageKey);
-    return item ? JSON.parse(item) : initialValue;
+    return item ? (JSON.parse(item) as GameState) : initialState;
   }
 
-  #saveState(stateOrFn) {
+  #saveState(stateOrFn: GameState | ((prevState: GameState) => GameState)) {
     const prevState = this.#getState();
     let newState;
 

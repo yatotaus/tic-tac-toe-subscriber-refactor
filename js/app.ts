@@ -1,8 +1,9 @@
 import View from "./view.js";
 import Store from "./store.js";
+import type { Game, GameState, Move, Player } from "./types";
 
 // Our players "config" - defines icons, colors, name, etc.
-const players = [
+const players: Player[] = [
   {
     id: 1,
     name: "Player 1",
@@ -44,8 +45,6 @@ function init() {
   view.render(store.game, store.stats);
 
   view.bindPlayerNew((square) => {
-    const clickedSquare = event.target;
-
     const existingMove = store.game.moves.find(
       (move) => move.squareId === +square.id
     );
