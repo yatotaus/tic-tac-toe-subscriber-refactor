@@ -1,6 +1,6 @@
 # Tic Tac Toe Subscriber Refactor
 
-
+There are three different branches to take a look at 👀 Read below the differences between each one of them. 
 
 
 ## Vanilla Refactor 
@@ -11,6 +11,17 @@ You can also view the typescript Git branch to see how this would look written i
 
 ## React Refactor + TypeScript
 this shows a React implementation of the project, which is a much more declarative approach than the vanilla implementations, which are mostly imperative. 
+
+## Preview of the game
+
+[Tic tac toe](https://github.com/yatotaus/tic-tac-toe-subscriber-refactor/assets/17890925/953e655c-6ab2-4ab1-9594-54e4461fe41d)
+
+
+
+
+
+
+
 
 ### Attribution
 
